@@ -2,7 +2,7 @@ defmodule Preport.Youtrack do
   use HTTPoison.Base
 
   def process_url(filter) do
-    "https://youtrack.toptal.net/youtrack/rest/issue?filter=" <> filter
+    "https://youtrack.toptal.net/youtrack/rest/issue?filter=#{filter}&max=50"
   end
 
   def process_response_body(body) do

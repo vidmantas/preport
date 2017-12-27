@@ -1,14 +1,16 @@
 <h2>Done:</h2>
+<p class="range"><%= @start_date %> - <%= @end_date %></p>
+<p><strong>Total points: <%= total_points(@issues) %></strong></p>
 
-<%= for issue <- @issues do %>
-  <p>
-    <a href="https://youtrack.toptal.net/youtrack/issue/<%= issue[:identifier] %>" target="_blank"><%= issue[:identifier] %></a>
-    <%= issue[:title] %>
-  </p>
-<% end %>
-
-<pre>
-  TODO:
-  To be done next week
-  Total points
-</pre>
+<table>
+  <tr>
+    <td>Ticket</td>
+    <td>Title</td>
+  </tr>
+  <%= for issue <- @issues do %>
+    <tr>
+      <td><a href="https://youtrack.toptal.net/youtrack/issue/<%= issue[:identifier] %>" target="_blank"><%= issue[:identifier] %></a></td>
+      <td><%= issue[:title] %></td>
+    </tr>
+  <% end %>
+</table>
