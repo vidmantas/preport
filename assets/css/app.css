@@ -1,1 +1,3 @@
 /* This file is for your main application css. */
+td:first-child { width: 90px; }
+td { vertical-align: text-top; }

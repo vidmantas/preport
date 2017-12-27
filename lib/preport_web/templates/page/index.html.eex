@@ -4,8 +4,8 @@
 
 <table>
   <tr>
-    <td>Ticket</td>
-    <td>Title</td>
+    <th>Ticket</th>
+    <th>Title</th>
   </tr>
   <%= for issue <- @issues do %>
     <tr>

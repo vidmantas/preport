@@ -20,7 +20,7 @@ defmodule WeeklyReport do
     expand_to_week(year, String.to_integer(week))
   end
 
-  def date_range do
+  def date_range(%{}) do
     {year, week} = :calendar.iso_week_number
     expand_to_week(year, week)
   end
