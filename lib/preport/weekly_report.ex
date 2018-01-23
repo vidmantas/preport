@@ -1,7 +1,18 @@
 defmodule WeeklyReport do
-  def issues(params \\ %{}) do
+  def done_issues(params \\ %{}) do
     {start_date, end_date} = date_range(params)
     raw_issues = Preport.Youtrack.get!(search_query(start_date, end_date)).body
+    Enum.map raw_issues, fn issue ->
+      project = field_value(issue, "projectShortName")
+      number = field_value(issue, "numberInProject")
+      points = field_value(issue, "Story Points") |> points
+
+      %{identifier: "#{project}-#{number}", title: field_value(issue, "summary"), points: points}
+    end
+  end
+
+  def in_progress_issues do
+    raw_issues = Preport.Youtrack.get!(in_progress_query).body
     Enum.map raw_issues, fn issue ->
       project = field_value(issue, "projectShortName")
       number = field_value(issue, "numberInProject")
@@ -34,6 +45,8 @@ defmodule WeeklyReport do
   end
 
   defp points(nil), do: 0
+  # TODO: fix floating points estimation. Week 1
+  defp points(["0.5" | _]), do: 0
   defp points([head | _]), do: String.to_integer(head)
 
   defp field_value(issue, name) do
@@ -49,5 +62,9 @@ defmodule WeeklyReport do
 
   defp search_query(start_date, end_date) do
     "Sprint:%20%7BTeam%20Enterprise%20Sales%20Ops%20Kanban%7D%20%23Done%20resolved%20date:%20#{start_date}%20..%20#{end_date}%20order%20by:%20%7Bissue%20id%7D%20desc"
+  end
+
+  defp in_progress_query do
+    "Sprint:%20%7BTeam%20Enterprise%20Sales%20Ops%20Kanban%7D%20and%20(Status:%20%7BIn%20Progress%7D%20or%20Status:%20%7BIn%20Review%7D)"
   end
 end
